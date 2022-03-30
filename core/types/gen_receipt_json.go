@@ -17,6 +17,7 @@ var _ = (*receiptMarshaling)(nil)
 func (r Receipt) MarshalJSON() ([]byte, error) {
 	type Receipt struct {
 		Type              hexutil.Uint64 `json:"type,omitempty"`
+		RevertReason	  hexutil.Bytes  `json:"revertReason,omitempty"`
 		PostState         hexutil.Bytes  `json:"root"`
 		Status            hexutil.Uint64 `json:"status"`
 		CumulativeGasUsed hexutil.Uint64 `json:"cumulativeGasUsed" gencodec:"required"`
@@ -31,6 +32,7 @@ func (r Receipt) MarshalJSON() ([]byte, error) {
 	}
 	var enc Receipt
 	enc.Type = hexutil.Uint64(r.Type)
+	enc.RevertReason = r.RevertReason
 	enc.PostState = r.PostState
 	enc.Status = hexutil.Uint64(r.Status)
 	enc.CumulativeGasUsed = hexutil.Uint64(r.CumulativeGasUsed)
@@ -49,6 +51,7 @@ func (r Receipt) MarshalJSON() ([]byte, error) {
 func (r *Receipt) UnmarshalJSON(input []byte) error {
 	type Receipt struct {
 		Type              *hexutil.Uint64 `json:"type,omitempty"`
+		RevertReason      *hexutil.Bytes  `json:"revertReason,omitempty"`
 		PostState         *hexutil.Bytes  `json:"root"`
 		Status            *hexutil.Uint64 `json:"status"`
 		CumulativeGasUsed *hexutil.Uint64 `json:"cumulativeGasUsed" gencodec:"required"`
@@ -67,6 +70,9 @@ func (r *Receipt) UnmarshalJSON(input []byte) error {
 	}
 	if dec.Type != nil {
 		r.Type = uint8(*dec.Type)
+	}
+	if dec.RevertReason != nil {
+		r.RevertReason = *dec.RevertReason
 	}
 	if dec.PostState != nil {
 		r.PostState = *dec.PostState
